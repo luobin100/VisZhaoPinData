@@ -1,0 +1,58 @@
+
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<style>
+table { table-layout: fixed; }
+table th, table td { overflow: hidden; }
+</style>
+<table style="width: 2000px" class="table table-hover">
+<thead>
+<tr>
+<th style="width: 35px" scope="col">#</th>
+<th style="width: 300px" scope="col">title</th>
+<th style="width: 500px" scope="col">postMessage</th>
+<th scope="col">detectedDelTime</th>
+<th scope="col">postid</th>
+<th scope="col">tid</th>
+<th scope="col">userId</th>
+<th scope="col">userName</th>
+<th scope="col">postsCount</th>
+<th scope="col">points</th>
+<th scope="col">accountCreatedDate</th>
+<th scope="col">postDateTime</th>
+<th scope="col">floorNum</th>
+<th scope="col">postStatus</th>
+<th scope="col">locked</th>
+</tr>
+</thead>
+<tbody>
+
+<% i = 0; %>
+<% rows.forEach(function(row) { %>
+    <tr>
+    <th scope="row"><%= (i + 1)  %></th>
+    <td><%= rows[i].title  %></td>
+
+    <td><%- String(rows[i].postMessage).replace(/<img src=/g,'<img class="img-fluid" alt="Responsive image" src=')  %></td>
+    <td><%= rows[i].detectedDelTime  %></td>
+    <td><%= rows[i].postid  %></td>
+    <td><a href=https://www.hi-pda.com/forum/viewthread.php?tid=<%= rows[i].tid %>><%= rows[i].tid  %></a></td>
+    <td><%= rows[i].userId  %></td>
+    <td><%= rows[i].userName  %></td>
+    <td><%= rows[i].postsCount  %></td>
+    <td><%= rows[i].points  %></td>
+    <td><%= rows[i].accountCreatedDate  %></td>
+    <td><%= rows[i].postDateTime  %></td>
+    <td><%= rows[i].floorNum  %></td>
+    <td><%= rows[i].postStatus  %></td>
+    <td><%= rows[i].locked  %></td>
+    </tr>
+    <% i++; %>
+<% }); %>
+</tbody>
+</table>
+</body>
+</html>
