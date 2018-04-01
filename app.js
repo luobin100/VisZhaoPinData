@@ -1,39 +1,68 @@
 const express = require('express')
-var mysql = require('mysql');
+var bodyParser = require('body-parser')
+
 const app = express()
+var techCount = require("./techCount.js")
+var allCount = require("./allCount.js")
+var techwords = require("./techwords.js")
+var allRecWithLoc = require("./allRecWithLoc.js")
+
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "123",
-  database: "HipdaScr"
-});
 
-sql = "SELECT title.title,\
-    post.postMessage,\
-    post.*\
-    FROM TB_Post_deldetect post\
-    join TB_Title_deldetect title\
-    on title.tid = post.tid\
-    order by post.tid desc, post.floorNum;"
+// create application/json parser
+var jsonParser = bodyParser.json()
 
-con.connect(function(err) {
-    if (err) throw err;
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+
+// 设置静态资源根目录
+app.use(express.static('public'))
+
+
+app.get('/getTechCount', (req, res) => {
+    // 要用callback
+    techCount.get(data => res.json(data))
 })
 
-app.get('/latest', function(req, res){  
-    con.query(sql, function (err, rows, fields) {
-        if (err) throw err;
-        // console.log(result);
+// post  要用到 body-parser，json 格式用 json 对应的parser （作为第二参数传入）
+app.post('/getTechCount', jsonParser, (req, res) => {
+    // console.log(req.body)
+techCount.get(req.body ,data => res.json(data))
+})
 
-        res.render('pages/latest', {
-            rows: rows
-        });
-    
-    });
-});
+
+app.get('/getAllCount', (req, res) => {
+    // 要用callback
+    allCount.get(data => res.json(data))
+})
+
+app.get('/getAllRecWithLoc', (req, res) => {
+    // 要用callback
+    allRecWithLoc.get(data => res.json(data))
+})
+
+
+
+app.get('/getTechwords', (req, res) => {
+    // 要用callback
+    techwords.get(data => res.json(data))
+})
+
+// app.get('/select_techwords.html', (req, res) => res.sendFile(__dirname + '/select_techwords.html'))
+
+
+// app.get('/TechMensionTime.html', (req, res) => res.sendFile(__dirname + '/TechMensionTime.html'))
+//
+// app.get('/ZhaoPinMap.html', (req, res) => res.sendFile(__dirname + '/ZhaoPinMap.html'))
+
+// app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'))
+// app.get('/index', (req, res) => res.sendFile(__dirname + '/index.html'))
+// app.get('/index.html', (req, res) => res.sendFile(__dirname + '/index.html'))
+
+
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))

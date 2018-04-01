@@ -1,0 +1,180 @@
+
+<!doctype html>
+<html lang="zh-HANS">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+
+    <title></title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!--<link rel="stylesheet" href="/resources/demos/style.styles">-->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+
+    <style>
+      div.visible {display: block;}
+      div.invisible {display: none;}
+      #feedback { font-size: 1.4em; }
+      #selectable .ui-selecting { background: #FECA40; }
+      #selectable .ui-selected { background: #F39814; color: white; }
+      #selectable { list-style-type: none; margin: 0; padding: 0; width: 80%; }
+      #selectable li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; display: inline-block;}
+      .delete-techword {vertical-align: top;  }
+    </style>
+    <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+  </head>
+  <body>
+  <div id="chartpage" class="invisible">
+<div id="container" style="min-width: 300px; height: 600px; margin: 0 auto"></div>
+    <button id="back_to_select">返回选择</button>
+  </div>
+
+<div id="selectpage" class="visible">
+  <div id="container_select"></div>
+  <input type="text" value="" id="inputtechword"/>
+
+  <button id="addtechword">添加新词条</button><br>
+  <button id="submit">点击提交</button>
+
+</div>
+
+
+
+<script>
+    $( function() {
+
+        const techwords = $.ajax({url:"/getTechwords", async:false}).responseJSON
+
+        const e_ol = document.createElement('ol')
+        e_ol.id = "selectable"
+        techwords.forEach(techword => {
+            let e_li = document.createElement('li')
+            e_li.className = "ui-widget-content"
+            e_li.textContent = techword
+            e_ol.appendChild(e_li)
+        })
+
+
+
+        document.getElementById("container_select").appendChild(e_ol)
+        $( "#selectable" ).selectable({
+            filter:"li"
+        });
+
+
+        $("#addtechword").click(function(){
+            $( "#selectable" ).append("<li class='ui-widget-content'>"+$("#inputtechword").val()+"<input type='button' class='delete-techword' value='x' onClick='this.parentNode.parentNode.removeChild(this.parentNode);'/></li>")
+            $("#inputtechword").val("")
+        })
+
+        $("#submit").click(function(){
+            arrSelected = []
+            $( ".ui-selected" ).each(function() {
+                arrSelected.push(this.innerText)
+            })
+            console.log(arrSelected)
+
+            showChart(arrSelected)
+
+
+        })
+
+        $("#back_to_select").click(function(){
+
+            togglePage();
+        })
+
+    } );
+
+    function togglePage(){
+        $("#selectpage").toggleClass("visible invisible");
+        $("#chartpage").toggleClass("visible invisible");
+    }
+</script>
+
+
+<script type="text/javascript">
+  function showChart(arrSelected){
+
+      const techCounts = $.ajax({
+          url: '/getTechCount',
+          type: 'POST',
+          async:false,
+          contentType: 'application/json',
+          data: JSON.stringify(arrSelected)
+      }).responseJSON
+
+      // 判断返回结果是否正常
+      if (techCounts[0] == 0){
+          alert("请选择词条。")
+          return
+      }
+
+      // const techCounts = $.ajax({url:"/getTechCount", async:false}).responseJSON
+      const arrTechCounts = []
+      techCounts.forEach(techCount => arrTechCounts.push([techCount.techword, techCount.cnt]))
+      const arrAllCount = $.ajax({url:"/getAllCount", async:false}).responseJSON
+      const allCount = arrAllCount[0].cnt
+
+      Highcharts.chart('container', {
+          chart: {
+              type: 'column'
+          },
+          title: {
+              text: '智联招聘 深圳 前端 搜索结果中各项技术被提到的次数'
+          },
+          subtitle: {
+              text: '搜索总结果数：' + allCount.toString() + ' （不包含没有地址的公司）'
+          },
+          xAxis: {
+              type: 'category',
+              labels: {
+                  rotation: -45,
+                  style: {
+                      fontSize: '13px',
+                      fontFamily: 'Verdana, sans-serif'
+                  }
+              }
+          },
+          yAxis: {
+              min: 0,
+              title: {
+                  text: '提到 (次)'
+              }
+          },
+          legend: {
+              enabled: false
+          },
+          tooltip: {
+              pointFormat: '在智联招聘 \'深圳\' \'前端\' 搜索结果中，被提到: <b>{point.y:.0f} 次</b>'
+          },
+          series: [{
+              name: 'counts',
+              data: arrTechCounts,
+              dataLabels: {
+                  enabled: true,
+                  rotation: -90,
+                  color: '#FFFFFF',
+                  align: 'right',
+                  format: '{point.y:.0f}', // one decimal
+                  y: 10, // 10 pixels down from the top
+                  style: {
+                      fontSize: '13px',
+                      fontFamily: 'Verdana, sans-serif'
+                  }
+              }
+          }]
+      });
+
+      togglePage();
+  }
+
+</script>
+  </body>
+</html>

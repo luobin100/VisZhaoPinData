@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <style type="text/css">
+      body,html,#container{
+        height: 100%;
+        margin: 0px;
+        font:12px Arial;
+      }
+      .taiwan{
+      	border: solid 1px red;
+      	color: red;
+      	float: left;
+      	width: 50px;
+      	background-color: rgba(255,0,0,0.1)
+      }
+    </style>
+    <title>Marker example</title>
+  </head>
+  <body>
+   <div id="container" tabindex="0"></div>
+   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+   <script src="https://webapi.amap.com/js/marker.js"></script>
+   <!--<script src="jobdetails.js"></script>-->
+   <script src="https://webapi.amap.com/maps?v=1.4.2&key=您申请的key值"></script>
+   <script type="text/javascript">
+
+        const jobdetails = $.ajax({url:"/getAllRecWithLoc", async:false}).responseJSON
+
+        // var map = new AMap.Map('container',{resizeEnable: true,zoom:4});
+        var map = new AMap.Map('container',{
+            resizeEnable: true,
+            zoom: 11,
+            center: [114.063669,22.68441]
+        });
+        var markers = []; //province见Demo引用的JS文件
+        for (var i = 0; i < jobdetails.length; i += 1) {
+    			var marker;
+
+          marker = new AMap.Marker({
+            position: [jobdetails[i].locLon, jobdetails[i].locLat],
+            title: jobdetails[i].comp_name + '--' + jobdetails[i].job_name
+             + '--' + jobdetails[i].job_sal
+             + '\n\n' + jobdetails[i].job_desc,
+             // icon: "http://webapi.amap.com/images/0.png",
+            // icon: new AMap.Icon({
+            //         image: "http://webapi.amap.com/images/0.png",
+            //         size: new AMap.Size(12, 12),  //图标大小
+            //         imageSize: new AMap.Size(12,12)
+            //           }),
+            map: map
+          });
+
+    			markers.push(marker);
+    		}
+
+        // setFitView 会自动调整地图大小和中心位置
+        // 导致 Map 里的 zoom 和 center 不起作用
+			  // map.setFitView();
+    </script>
+    <script type="text/javascript" src="https://webapi.amap.com/demos/js/liteToolbar.js"></script>
+  </body>
+</html>

@@ -1,0 +1,66 @@
+var config = {}
+
+config.db= {
+    host: "localhost",
+    user: "root",
+    password: "123",
+    database: "zhilian"
+}
+
+
+config.techwords = [
+    'websocket',
+    'socket',
+    '原生js/原生javascript',
+    'async',
+    'promise',
+    'babel',
+    'typescript',
+    'jquery',
+    'bootstrap',
+    'react',
+    'vue',
+    'angular',
+    'echart',
+    'highchart',
+    'd3',
+    '数据可视化',
+    '手写代码',
+    'http协议',
+    'DIV',
+    '前后端分离',
+    '英语',
+    '数据结构',
+    '算法',
+    '爬虫',
+    'canvas',
+    'webGL',
+    'svg',
+    'node',
+    'express',
+    'nginx',
+    'python',
+    'asp.net',
+    'php',
+    'ps/photoshop',
+    'mysql',
+    'mongodb',
+    'redis',
+    'html5',
+    'es6',
+    'W3C',
+    '本科',
+    '专科/大专',
+    '学位证',
+    'sass',
+    'less',
+    'gulp',
+    'grunt',
+    'webpack',
+    '手机端/移动端',
+    'pc端',
+    'react native/react-native',
+    'zepto'
+]
+
+module.exports = config
