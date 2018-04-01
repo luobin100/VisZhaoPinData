@@ -9,4 +9,4 @@
 5. 浏览器访问 `localhost:3000/`
 
 ### Demo
-[前往此处查看效果](https://luobin100.github.io/ViaZhaoPinData/demo/demo.html)
+[前往此处查看效果](https://luobin100.github.io/VisZhaoPinData/demo/demo.html)
