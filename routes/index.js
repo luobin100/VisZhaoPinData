@@ -7,12 +7,6 @@ var allCount = require("../allCount.js")
 var techwords = require("../techwords.js")
 var allRecWithLoc = require("../allRecWithLoc.js")
 
-// /* GET home page. */
-// router.get('/', function(req, res, next) {
-//   res.render('index', { title: 'Express' });
-// });
-
-
 
 // create application/json parser
 var jsonParser = bodyParser.json()
