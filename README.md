@@ -10,3 +10,5 @@
 
 ### Demo
 [前往此处查看效果](https://luobin100.github.io/VisZhaoPinData/demo/demo.html)
+  
+[live demo](http://luo1.cn:3000/)
